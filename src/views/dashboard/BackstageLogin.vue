@@ -1,5 +1,8 @@
 <template>
-  <div class="text-25px text-#ff6700 bg-#ccc">你好Unocss</div>
+  <el-container>
+    <el-main >Main</el-main>
+  </el-container>
+  <el-button type="primary">Primary</el-button>
 </template>
 
 <script setup>
