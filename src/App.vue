@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <!-- <div>
     <RouterLink to="/admin/login">後台登入頁 | </RouterLink>
     <RouterLink to="/admin/carbasicinfo">車商基本資料頁</RouterLink>
-  </div>
+  </div> -->
   <RouterView />
 </template>
 
 <script setup>
-import HelloWorld from './components/HelloWorld.vue';
 import dayjs from 'dayjs';
 console.log(dayjs().format("YYYY-MM-DD HH:mm:ss"));
 </script>
