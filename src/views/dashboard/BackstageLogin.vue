@@ -17,7 +17,7 @@
               <p class="font-600 text-primary text-center mb-7">格上駕駛附駕平台</p>
               <h1 class="font-600 text-8 text-primary text-center mb-10">客服端</h1>
               <el-form-item label="帳號" type="font-size-large" prop="checkPass" class="mb-10 font-600">
-                <el-input type="password" autocomplete="off" class="border-primary" />
+                <el-input type="password" autocomplete="off" class="border-none" />
               </el-form-item>
               <el-form-item label="密碼" prop="pass" class="mb-12 font-600">
                 <el-input type="password" autocomplete="off" />
@@ -45,7 +45,11 @@
 </script>
 
 <style scoped>
-el-form-item {
-  font-size: 20px ;
+:deep .el-form-item__label {
+  font-size: 20px;
+}
+:deep .el-input__wrapper {
+  border: 1px solid #2788BF;
+  border-radius: 5px;
 }
 </style>
