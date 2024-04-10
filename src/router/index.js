@@ -4,7 +4,7 @@ const router = createRouter({
   routes: [
     { // 後台
       path: '/admin',
-      component: () => import('../views/dashboard/BackstageLogin.vue'),
+      component: () => import('../views/dashboard/AdminView.vue'),
       children: [
         { // 後台登入頁
           path: 'login',
