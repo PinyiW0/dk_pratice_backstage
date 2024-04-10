@@ -62,8 +62,8 @@
   min-height: 460px;
 }
 .bgimage {
-background-image: url('/loginBgWeb.png');
-background-repeat: no-repeat;
-background-size: cover;
+  background-image: url('/loginBgWeb.png');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>

@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  // linkActiveClass: 'active',
   routes: [
     { // 後台
       path: '/admin',
@@ -13,9 +12,9 @@ const router = createRouter({
           component: () => import('../views/dashboard/BackstageLogin.vue'),
         },
         { // 車商基本資料
-          path: 'carbasicinfo',
-          name: 'carbasicinfo',
-          component: () => import('../views/dashboard/BackStage.vue'),
+          path: 'carinfo',
+          name: 'carinfo',
+          component: () => import('../views/dashboard/BackstageView.vue'),
         },
       ],
     },
