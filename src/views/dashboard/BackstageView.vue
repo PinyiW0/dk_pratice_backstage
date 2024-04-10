@@ -8,7 +8,7 @@
             <el-space direction="horizontal" alignment="center" :size="16">
               <img src="/logo-v.svg" alt="格上租車橫式Logo" />
               <h2 class="font-500 text-5">格上駕駛附駕平台</h2>
-              <el-icon color="#FF5600"><Fold /></el-icon>
+              <el-icon color="#FF5600" :size="22"><fold /></el-icon>
             </el-space>
           </nav>
         </div>
@@ -70,14 +70,254 @@
             >
             <el-breadcrumb-item>車商基本資料</el-breadcrumb-item>
           </el-breadcrumb>
+          <div class="bg-white m-5 border-rounded-1">
+            <el-row justify="space-between" alignment="center" me-5>
+              <el-col :span="18">
+                <div class="grid-content ep-bg-white">
+                  <h1 class="text-6 font-600 p-5">車商基本資料</h1>
+                </div>
+              </el-col>
+              <el-col :span="3">
+                <el-button
+                  type="primary"
+                  round
+                  @click="dialogVisible = true"
+                  class="my-5 w-full"
+                >
+                  新增
+                </el-button>
+                <el-dialog
+                  v-model="dialogVisible"
+                  title="新增車商基本資料"
+                  width="500"
+                  :before-close="handleClose"
+                >
+                  <span>新增車商基本資料</span>
+                  <template #footer>
+                    <div class="dialog-footer">
+                      <el-button @click="dialogVisible = false">取消</el-button>
+                      <el-button type="primary" @click="dialogVisible = false">
+                        儲存
+                      </el-button>
+                    </div>
+                  </template>
+                </el-dialog>
+              </el-col>
+            </el-row>
+            <el-row justify="space-between">
+              <el-col :span="18">
+                <el-space
+                  direction="horizontal"
+                  alignment="center"
+                  class="pb-5"
+                >
+                  <div class="grid-content ep-bg-white mx-5">
+                    <div class="flex flex-wrap gap-4 items-center">
+                      <el-select
+                        v-model="value"
+                        placeholder="服務類型"
+                        size="large"
+                        style="width: 200px"
+                      >
+                        <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        />
+                      </el-select>
+                    </div>
+                  </div>
+                  <el-button class="bg-dark-gray text-white border-0 px-5">
+                    <el-icon :size="20">
+                      <Close />
+                    </el-icon>
+                    清除條件</el-button
+                  >
+                  <el-button class="bg-danger text-white border-0 px-5">
+                    <el-icon :size="18">
+                      <Search />
+                    </el-icon>
+                    搜尋</el-button
+                  >
+                </el-space>
+              </el-col>
+              <el-col :span="4">
+                <el-space
+                  direction="horizontal"
+                  alignment="center"
+                  class="pb-5"
+                >
+                  <div class="grid-content ep-bg-white">
+                    <el-checkbox
+                      v-model="checked2"
+                      label="顯示停用項目"
+                      size="large"
+                      alignment="center"
+                    />
+                  </div>
+                </el-space>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="23" class="mx-5 mb-5">
+                <el-table
+                  :data="tableData"
+                  border
+                  style="width: 100%"
+                  :row-class-name="tableRowClassName"
+                  :header-cell-style="headercellStyle"
+                >
+                  <el-table-column align="center" row-style="#F5F7F9" label="操作">
+                    <el-button
+                      type="primary"
+                      link
+                      @click="dialogVisible = true"
+                    >
+                      <el-icon :size="25">
+                        <Edit />
+                      </el-icon>
+                    </el-button>
+                  </el-table-column>
+                  <el-table-column align="center" label="啟用">
+                    <template #default="{ row }">
+                      <el-switch
+                        v-model="row.enabled"
+                        class="mt-2"
+                        style="margin-left: 24px"
+                        inline-prompt
+                        :active-icon="Check"
+                        :inactive-icon="Close"
+                      />
+                    </template>
+                  </el-table-column>
+                  <el-table-column align="center" prop="cardealer" label="車商代碼" />
+                  <el-table-column align="center" prop="cardealername" label="車商簡稱" />
+                  <el-table-column align="center" prop="importance" label="重要度" />
+                  <el-table-column align="center" prop="servertype" label="服務類型" />
+                  <el-table-column align="center" prop="bidnum" label="統一編號" />
+                  <el-table-column align="center" prop="principal" label="負責人" />
+                  <el-table-column align="center" prop="contactnum" label="聯絡電話" />
+                </el-table>
+              </el-col>
+            </el-row>
+          </div>
         </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
-<script setup>
-// import dayjs from "dayjs";
+<script lang="ts" setup>
+import { ref } from "vue";
+import { Search, Close, Edit, Check } from "@element-plus/icons-vue";
+import { ElMessageBox } from "element-plus";
+
+const value = ref("");
+const value2 = ref(true);
+
+const options = [
+  {
+    value: "機場接送",
+    label: "機場接送",
+  },
+  {
+    value: "代駕服務",
+    label: "代駕服務",
+  },
+  {
+    value: "計時包車",
+    label: "計時包車",
+  },
+  {
+    value: "長照接駁",
+    label: "長照接駁",
+  },
+];
+
+const dialogVisible = ref(false);
+
+const handleClose = function (done) {
+  ElMessageBox.confirm("是否確認完資訊?")
+    .then(function () {
+      done();
+    })
+    .catch(function () {
+      // catch error
+    });
+};
+
+// interface User {
+//   enabled: boolean;
+//   cardealer: string;
+//   cardealername: string;
+//   importance: string;
+//   servertype: string;
+//   bidnum: string;
+//   principal: string;
+//   contactnum: string;
+// }
+
+// const tableRowClassName = ({
+//   row,
+//   rowIndex,
+// }: {
+//   row: User;
+//   rowIndex: number;
+// }) => {
+//   if (rowIndex === 1) {
+//     return "header-row";
+//   } else {
+//     return "";
+//   }
+// };
+const headercellStyle = (data) => {
+  return {
+    background: "#F5F7F9",
+  }
+};
+const tableData = [
+  {
+    enabled: true,
+    cardealer: "7",
+    cardealername: "格上汽車",
+    importance: "1",
+    servertype: "機場接送、代駕服務、計時包車、長照接駁",
+    bidnum: "12208883",
+    principal: "",
+    contactnum: "",
+  },
+  {
+    enabled: true,
+    cardealer: "7",
+    cardealername: "格上汽車",
+    importance: "1",
+    servertype: "機場接送、代駕服務",
+    bidnum: "12208883",
+    principal: "",
+    contactnum: "",
+  },
+  {
+    enabled: true,
+    cardealer: "7",
+    cardealername: "格上汽車",
+    importance: "1",
+    servertype: "機場接送、代駕服務、計時包車",
+    bidnum: "12208883",
+    principal: "",
+    contactnum: "",
+  },
+  {
+    enabled: true,
+    cardealer: "7",
+    cardealername: "格上汽車",
+    importance: "1",
+    servertype: "代駕服務",
+    bidnum: "12208883",
+    principal: "",
+    contactnum: "",
+  },
+];
 </script>
 
 <style scoped>
@@ -92,4 +332,8 @@
   background-color: white;
   padding: 6px 16px;
 }
+:deep .el-table thead {
+  color: #004098;
+}
+
 </style>

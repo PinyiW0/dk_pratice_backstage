@@ -17,6 +17,7 @@ export default defineConfig({
       'primary-light': '#409EFF',
       'primary-dark': '#195090',
       'danger': '#E6653C',
+      'dark-gray': '#828282',
       'bdr-gray': '#DCE0F0',
       'bg-gray':'#F5F7F9',
     },
