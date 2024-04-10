@@ -49,10 +49,10 @@
 </script>
 
 <style scoped>
-:deep .el-form-item__label {
+:deep(.el-form-item__label) {
   font-size: 20px;
 }
-:deep .el-input__wrapper {
+:deep(.el-input__wrapper) {
   border: 1px solid #2788bf;
   border-radius: 5px;
   box-shadow: none;

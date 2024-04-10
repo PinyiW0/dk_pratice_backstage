@@ -321,18 +321,18 @@ const tableData = [
 </script>
 
 <style scoped>
-:deep .el-header {
+:deep(.el-header) {
   margin-bottom: 20px;
 }
-:deep .menu-active {
+:deep(.menu-active) {
   background-color: #195090;
 }
-:deep .el-breadcrumb {
+:deep(.el-breadcrumb) {
   border: 1px solid #dce0f0;
   background-color: white;
   padding: 6px 16px;
 }
-:deep .el-table thead {
+:deep(.el-table thead) {
   color: #004098;
 }
 
