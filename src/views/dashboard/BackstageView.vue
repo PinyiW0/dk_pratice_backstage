@@ -166,7 +166,7 @@
                   border
                   style="width: 100%"
                   :row-class-name="tableRowClassName"
-                  :header-cell-style="headercellStyle"
+                  :header-cell-style="{background: '#F5F7F9'}"
                 >
                   <el-table-column align="center" row-style="#F5F7F9" label="操作">
                     <el-button
@@ -271,11 +271,11 @@ const handleClose = function (done) {
 //     return "";
 //   }
 // };
-const headercellStyle = (data) => {
-  return {
-    background: "#F5F7F9",
-  }
-};
+// const headercellStyle = (data) => {
+//   return {
+//     background: "#F5F7F9",
+//   }
+// };
 const tableData = [
   {
     enabled: true,
