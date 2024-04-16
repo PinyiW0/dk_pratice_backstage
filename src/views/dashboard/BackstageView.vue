@@ -1,16 +1,16 @@
 <script setup>
 import { computed, ref } from "vue";
 import { ElMessageBox } from "element-plus";
-import { useRouter } from 'vue-router';
-import ButtonView from '/src/components/ButtonView.vue';
+import { useRouter } from "vue-router";
+import ButtonView from "/src/components/ButtonView.vue";
 
 const value = ref("");
 const value2 = ref(true);
 const router = useRouter();
 
 const logout = () => {
-  localStorage.removeItem('token');
-  router.push('/admin/login');
+  localStorage.removeItem("token");
+  router.push("/admin/login");
 };
 
 const options = [
@@ -89,12 +89,15 @@ const tableData = [
   },
 ];
 const filterData = computed(() => {
-  if (showDisabled.value) {
-    return tableData.filter(item => !item.enabled);
-  } else {
-    return tableData.filter(item => item.enabled);
-  }
-})
+  return tableData.filter((item) =>
+    showDisabled.value ? !item.enabled : item.enabled
+  );
+  // if (showDisabled.value) {
+  //   return tableData.filter(item => !item.enabled);
+  // } else {
+  //   return tableData.filter(item => item.enabled);
+  // }
+});
 </script>
 <template>
   <div class="common-layout">
@@ -102,7 +105,9 @@ const filterData = computed(() => {
       <!-- nav 列 -->
       <el-header>
         <div>
-          <nav class="p-5 alignment-container flex justify-between items-center">
+          <nav
+            class="p-5 alignment-container flex justify-between items-center"
+          >
             <el-space direction="horizontal" alignment="center" :size="16">
               <img src="/logo-v.svg" alt="格上租車橫式Logo" />
               <h2 class="font-500 text-5">格上駕駛附駕平台</h2>
@@ -110,12 +115,12 @@ const filterData = computed(() => {
             </el-space>
             <el-space>
               <el-button
-              type="primary"
-              class="text-4 font-500 rounded-full mx-auto"
-              @click="logout"
-              plain
-              >登出</el-button
-            >
+                type="primary"
+                class="text-4 font-500 rounded-full mx-auto"
+                @click="logout"
+                plain
+                >登出</el-button
+              >
             </el-space>
           </nav>
         </div>

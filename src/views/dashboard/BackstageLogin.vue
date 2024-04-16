@@ -1,32 +1,64 @@
-<script setup>
+<script lang="ts" setup>
 // import dayjs from 'dayjs';
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
+import type { FormInstance, FormRules } from "element-plus";
 
 const useraccount = ref("");
 const password = ref("");
 const router = useRouter();
 
-onMounted(() => {
-  useraccount.value = "";
-  password.value = "";
+interface RuleForm {
+  account: string;
+  password: string;
+}
+const ruleFormRef = ref<FormInstance>();
+const ruleForm = reactive<RuleForm>({
+  account: "",
+  password: "",
+});
+const rules = reactive<FormRules<RuleForm>>({
+  account: [
+    { required: true, message: "請輸入正確的帳號", trigger: "blur" },
+    { min: 3, max: 10, message: "長度應屆於 3 ~ 10 碼", trigger: "blur" },
+  ],
+  password: [
+    { required: true, message: "請輸入正確的密碼", trigger: "blur" },
+    { min: 3, max: 10, message: "長度應屆於 3 ~ 10 碼", trigger: "blur" },
+  ],
 });
 
-const login = () => {
-  // 空白驗證
-  if (!useraccount.value.trim() || !password.value.trim()) {
-    alert("帳號與密碼欄位不可空白");
-    return;
-  }
-  // 儲存 token
-  const token = JSON.stringify({
-    useraccount: useraccount.value,
-    password: password.value,
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      const token = JSON.stringify({
+        useraccount: ruleForm.account,
+        password: ruleForm.password,
+      });
+      localStorage.setItem("token", token);
+      router.push("/admin/carinfo");
+      resetForm(formEl);
+    } else {
+      console.log("error submit!", fields);
+    }
   });
-  localStorage.setItem("token", token);
-  router.push("/admin/carinfo");
 };
 
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
+
+// const login = () => {
+//   // 儲存 token
+//   const token = JSON.stringify({
+//     useraccount: useraccount.value,
+//     password: password.value,
+//   });
+//   localStorage.setItem("token", token);
+//   router.push("/admin/carinfo");
+// };
 </script>
 <template>
   <div class="common-layout bg-primary h-screen flex justify-center bgimage">
@@ -51,32 +83,26 @@ const login = () => {
           <h1 class="font-600 text-8 text-primary text-center mb-15">客服端</h1>
           <el-form-item
             label="帳號"
-            type="font-size-large"
-            prop="checkPass"
+            prop="account"
             class="mb-10 font-600"
+            placeholder="請輸入帳號"
           >
-            <el-input
-              type="account"
-              autocomplete="off"
-              class="border-none"
-              placeholder="請輸入帳號"
-              v-model="useraccount"
-            />
+            <el-input v-model="ruleForm.account" />
           </el-form-item>
-          <el-form-item label="密碼" prop="pass" class="mb-12 font-600">
-            <el-input
-              type="password"
-              autocomplete="off"
-              placeholder="請輸入密碼"
-              v-model="password"
-            />
+          <el-form-item
+            label="密碼"
+            prop="password"
+            class="mb-10 font-600"
+            placeholder="請輸入密碼"
+          >
+            <el-input v-model="ruleForm.password" show-password />
           </el-form-item>
           <el-form-item>
             <el-button
               type="primary"
               size="large"
               class="bg-primary border-0 text-5 font-500 px-15 rounded-full mx-auto"
-              @click.prevent="login"
+              @click.prevent="submitForm(ruleFormRef)"
               >登入</el-button
             >
           </el-form-item>
