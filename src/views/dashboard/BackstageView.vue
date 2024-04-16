@@ -1,14 +1,121 @@
+<script setup>
+import { computed, ref } from "vue";
+import { ElMessageBox } from "element-plus";
+import { useRouter } from 'vue-router';
+import ButtonView from '/src/components/ButtonView.vue';
+
+const value = ref("");
+const value2 = ref(true);
+const router = useRouter();
+
+const logout = () => {
+  localStorage.removeItem('token');
+  router.push('/admin/login');
+};
+
+const options = [
+  {
+    value: "機場接送",
+    label: "機場接送",
+  },
+  {
+    value: "代駕服務",
+    label: "代駕服務",
+  },
+  {
+    value: "計時包車",
+    label: "計時包車",
+  },
+  {
+    value: "長照接駁",
+    label: "長照接駁",
+  },
+];
+
+const dialogVisible = ref(false);
+
+const handleClose = (done) => {
+  ElMessageBox.confirm("是否確認完資訊?")
+    .then(function () {
+      done();
+    })
+    .catch(function () {
+      // catch error
+    });
+};
+
+// 篩選已停用項目
+const showDisabled = ref(false);
+const tableData = [
+  {
+    enabled: true,
+    cardealer: "7",
+    cardealername: "格上汽車",
+    importance: "1",
+    servertype: "機場接送、代駕服務、計時包車、長照接駁",
+    bidnum: "12208883",
+    principal: "",
+    contactnum: "",
+  },
+  {
+    enabled: false,
+    cardealer: "7",
+    cardealername: "格上汽車",
+    importance: "1",
+    servertype: "機場接送、代駕服務",
+    bidnum: "12208883",
+    principal: "",
+    contactnum: "",
+  },
+  {
+    enabled: true,
+    cardealer: "7",
+    cardealername: "格上汽車",
+    importance: "1",
+    servertype: "機場接送、代駕服務、計時包車",
+    bidnum: "12208883",
+    principal: "",
+    contactnum: "",
+  },
+  {
+    enabled: false,
+    cardealer: "7",
+    cardealername: "格上汽車",
+    importance: "1",
+    servertype: "代駕服務",
+    bidnum: "12208883",
+    principal: "",
+    contactnum: "",
+  },
+];
+const filterData = computed(() => {
+  if (showDisabled.value) {
+    return tableData.filter(item => !item.enabled);
+  } else {
+    return tableData.filter(item => item.enabled);
+  }
+})
+</script>
 <template>
   <div class="common-layout">
     <el-container>
       <!-- nav 列 -->
-      <el-header class="">
+      <el-header>
         <div>
-          <nav class="p-5 alignment-container">
+          <nav class="p-5 alignment-container flex justify-between items-center">
             <el-space direction="horizontal" alignment="center" :size="16">
               <img src="/logo-v.svg" alt="格上租車橫式Logo" />
               <h2 class="font-500 text-5">格上駕駛附駕平台</h2>
               <el-icon color="#FF5600" :size="22"><fold /></el-icon>
+            </el-space>
+            <el-space>
+              <el-button
+              type="primary"
+              class="text-4 font-500 rounded-full mx-auto"
+              @click="logout"
+              plain
+              >登出</el-button
+            >
             </el-space>
           </nav>
         </div>
@@ -128,18 +235,9 @@
                       </el-select>
                     </div>
                   </div>
-                  <el-button class="bg-dark-gray text-white border-0 px-5">
-                    <el-icon :size="20">
-                      <Close />
-                    </el-icon>
-                    清除條件</el-button
-                  >
-                  <el-button class="bg-danger text-white border-0 px-5">
-                    <el-icon :size="18">
-                      <Search />
-                    </el-icon>
-                    搜尋</el-button
-                  >
+                  <ButtonView title="清除條件" />
+                  <ButtonView title="搜尋" color="#E6653C" icon="Search" />
+                  <!-- hovercolor="danger-dark" -->
                 </el-space>
               </el-col>
               <el-col :span="4">
@@ -150,7 +248,7 @@
                 >
                   <div class="grid-content ep-bg-white">
                     <el-checkbox
-                      v-model="checked2"
+                      v-model="showDisabled"
                       label="顯示停用項目"
                       size="large"
                       alignment="center"
@@ -162,13 +260,17 @@
             <el-row>
               <el-col :span="23" class="mx-5 mb-5">
                 <el-table
-                  :data="tableData"
+                  :data="filterData"
                   border
                   style="width: 100%"
                   :row-class-name="tableRowClassName"
-                  :header-cell-style="{background: '#F5F7F9'}"
+                  :header-cell-style="{ background: '#F5F7F9' }"
                 >
-                  <el-table-column align="center" row-style="#F5F7F9" label="操作">
+                  <el-table-column
+                    align="center"
+                    row-style="#F5F7F9"
+                    label="操作"
+                  >
                     <el-button
                       type="primary"
                       link
@@ -191,13 +293,41 @@
                       />
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" prop="cardealer" label="車商代碼" />
-                  <el-table-column align="center" prop="cardealername" label="車商簡稱" />
-                  <el-table-column align="center" prop="importance" label="重要度" />
-                  <el-table-column align="center" prop="servertype" label="服務類型" />
-                  <el-table-column align="center" prop="bidnum" label="統一編號" />
-                  <el-table-column align="center" prop="principal" label="負責人" />
-                  <el-table-column align="center" prop="contactnum" label="聯絡電話" />
+                  <el-table-column
+                    align="center"
+                    prop="cardealer"
+                    label="車商代碼"
+                  />
+                  <el-table-column
+                    align="center"
+                    prop="cardealername"
+                    label="車商簡稱"
+                  />
+                  <el-table-column
+                    align="center"
+                    prop="importance"
+                    label="重要度"
+                  />
+                  <el-table-column
+                    align="center"
+                    prop="servertype"
+                    label="服務類型"
+                  />
+                  <el-table-column
+                    align="center"
+                    prop="bidnum"
+                    label="統一編號"
+                  />
+                  <el-table-column
+                    align="center"
+                    prop="principal"
+                    label="負責人"
+                  />
+                  <el-table-column
+                    align="center"
+                    prop="contactnum"
+                    label="聯絡電話"
+                  />
                 </el-table>
               </el-col>
             </el-row>
@@ -207,118 +337,6 @@
     </el-container>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { ref } from "vue";
-import { Search, Close, Edit, Check } from "@element-plus/icons-vue";
-import { ElMessageBox } from "element-plus";
-
-const value = ref("");
-const value2 = ref(true);
-
-const options = [
-  {
-    value: "機場接送",
-    label: "機場接送",
-  },
-  {
-    value: "代駕服務",
-    label: "代駕服務",
-  },
-  {
-    value: "計時包車",
-    label: "計時包車",
-  },
-  {
-    value: "長照接駁",
-    label: "長照接駁",
-  },
-];
-
-const dialogVisible = ref(false);
-
-const handleClose = function (done) {
-  ElMessageBox.confirm("是否確認完資訊?")
-    .then(function () {
-      done();
-    })
-    .catch(function () {
-      // catch error
-    });
-};
-
-// interface User {
-//   enabled: boolean;
-//   cardealer: string;
-//   cardealername: string;
-//   importance: string;
-//   servertype: string;
-//   bidnum: string;
-//   principal: string;
-//   contactnum: string;
-// }
-
-// const tableRowClassName = ({
-//   row,
-//   rowIndex,
-// }: {
-//   row: User;
-//   rowIndex: number;
-// }) => {
-//   if (rowIndex === 1) {
-//     return "header-row";
-//   } else {
-//     return "";
-//   }
-// };
-// const headercellStyle = (data) => {
-//   return {
-//     background: "#F5F7F9",
-//   }
-// };
-const tableData = [
-  {
-    enabled: true,
-    cardealer: "7",
-    cardealername: "格上汽車",
-    importance: "1",
-    servertype: "機場接送、代駕服務、計時包車、長照接駁",
-    bidnum: "12208883",
-    principal: "",
-    contactnum: "",
-  },
-  {
-    enabled: true,
-    cardealer: "7",
-    cardealername: "格上汽車",
-    importance: "1",
-    servertype: "機場接送、代駕服務",
-    bidnum: "12208883",
-    principal: "",
-    contactnum: "",
-  },
-  {
-    enabled: true,
-    cardealer: "7",
-    cardealername: "格上汽車",
-    importance: "1",
-    servertype: "機場接送、代駕服務、計時包車",
-    bidnum: "12208883",
-    principal: "",
-    contactnum: "",
-  },
-  {
-    enabled: true,
-    cardealer: "7",
-    cardealername: "格上汽車",
-    importance: "1",
-    servertype: "代駕服務",
-    bidnum: "12208883",
-    principal: "",
-    contactnum: "",
-  },
-];
-</script>
 
 <style scoped>
 :deep(.el-header) {
@@ -335,5 +353,4 @@ const tableData = [
 :deep(.el-table thead) {
   color: #004098;
 }
-
 </style>

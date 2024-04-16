@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary p-3">
+  <!-- <div class="bg-primary p-3">
     <el-row :gutter="20">
       <el-col :span="4" :offset="2">
         <RouterLink to="/admin/login" class="text-white align-middle"
@@ -12,6 +12,6 @@
         >
       </el-col>
     </el-row>
-  </div>
+  </div> -->
   <RouterView />
 </template>

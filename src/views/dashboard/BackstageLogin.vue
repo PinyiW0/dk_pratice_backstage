@@ -1,3 +1,33 @@
+<script setup>
+// import dayjs from 'dayjs';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const useraccount = ref("");
+const password = ref("");
+const router = useRouter();
+
+onMounted(() => {
+  useraccount.value = "";
+  password.value = "";
+});
+
+const login = () => {
+  // 空白驗證
+  if (!useraccount.value.trim() || !password.value.trim()) {
+    alert("帳號與密碼欄位不可空白");
+    return;
+  }
+  // 儲存 token
+  const token = JSON.stringify({
+    useraccount: useraccount.value,
+    password: password.value,
+  });
+  localStorage.setItem("token", token);
+  router.push("/admin/carinfo");
+};
+
+</script>
 <template>
   <div class="common-layout bg-primary h-screen flex justify-center bgimage">
     <el-row class="row-bg" align="middle">
@@ -25,16 +55,28 @@
             prop="checkPass"
             class="mb-10 font-600"
           >
-            <el-input type="password" autocomplete="off" class="border-none" />
+            <el-input
+              type="account"
+              autocomplete="off"
+              class="border-none"
+              placeholder="請輸入帳號"
+              v-model="useraccount"
+            />
           </el-form-item>
           <el-form-item label="密碼" prop="pass" class="mb-12 font-600">
-            <el-input type="password" autocomplete="off" />
+            <el-input
+              type="password"
+              autocomplete="off"
+              placeholder="請輸入密碼"
+              v-model="password"
+            />
           </el-form-item>
           <el-form-item>
             <el-button
               type="primary"
               size="large"
               class="bg-primary border-0 text-5 font-500 px-15 rounded-full mx-auto"
+              @click.prevent="login"
               >登入</el-button
             >
           </el-form-item>
@@ -43,10 +85,6 @@
     </el-row>
   </div>
 </template>
-
-<script setup>
-// import dayjs from 'dayjs';
-</script>
 
 <style scoped>
 :deep(.el-form-item__label) {
@@ -62,7 +100,7 @@
   min-height: 460px;
 }
 .bgimage {
-  background-image: url('/loginBgWeb.png');
+  background-image: url("/loginBgWeb.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
