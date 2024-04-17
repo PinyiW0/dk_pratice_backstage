@@ -50,15 +50,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
 };
 
-// const login = () => {
-//   // 儲存 token
-//   const token = JSON.stringify({
-//     useraccount: useraccount.value,
-//     password: password.value,
-//   });
-//   localStorage.setItem("token", token);
-//   router.push("/admin/carinfo");
-// };
 </script>
 <template>
   <div class="common-layout bg-primary h-screen flex justify-center bgimage">

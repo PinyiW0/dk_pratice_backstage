@@ -92,11 +92,6 @@ const filterData = computed(() => {
   return tableData.filter((item) =>
     showDisabled.value ? !item.enabled : item.enabled
   );
-  // if (showDisabled.value) {
-  //   return tableData.filter(item => !item.enabled);
-  // } else {
-  //   return tableData.filter(item => item.enabled);
-  // }
 });
 </script>
 <template>
@@ -242,7 +237,6 @@ const filterData = computed(() => {
                   </div>
                   <ButtonView title="清除條件" />
                   <ButtonView title="搜尋" color="#E6653C" icon="Search" />
-                  <!-- hovercolor="danger-dark" -->
                 </el-space>
               </el-col>
               <el-col :span="4">
